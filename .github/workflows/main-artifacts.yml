@@ -40,6 +40,8 @@ jobs:
           name: dist-files
           path: dist
   deploy:
+    env:
+      GLOBAL: ${{ vars.GLOBAL }}
     needs: build
     runs-on: ubuntu-latest
     steps:
