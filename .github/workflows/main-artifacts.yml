@@ -6,6 +6,8 @@ on:
 jobs:
   test:
     environment: QA
+    env:
+      env_vars: ${{ vars.QA_VARS }}
     runs-on: ubuntu-latest
     steps:
       - name: Get Code -checkout
@@ -20,7 +22,7 @@ jobs:
         run: npm test
       - name: Output information
         run: |
-          echo "QA var: ${{ var.QA_VARS }}"
+          echo "QA var: ${{ env.env_vars }}"
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -45,6 +47,9 @@ jobs:
           path: dist
   deploy:
     environment: prod
+    env:
+      GLOBAL: ${{ vars.GLOBAL }}
+      env_vars: ${{ vars.PROD_VARS }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -58,8 +63,8 @@ jobs:
         run: echo "Deploying..."
       - name: Output information
         run: |
-          echo "Global var: ${{ var.GLOBAL }}"
+          echo "Global var: ${{ env.GLOBAL }}"
       - name: Output information env
         run: |
-          echo "PROD var: ${{ var.PROD_VARS }}"
+          echo "PROD var: ${{ env.env_vars }}"
         
