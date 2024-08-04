@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   test:
+    environment: QA
     runs-on: ubuntu-latest
     steps:
       - name: Get Code -checkout
@@ -17,6 +18,9 @@ jobs:
         run: npm ci
       - name: Run Tests
         run: npm test
+      - name: Output information
+        run: |
+          echo "QA var: ${{ var.QA_VARS }}"
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -40,8 +44,7 @@ jobs:
           name: dist-files
           path: dist
   deploy:
-    env:
-      GLOBAL: ${{ vars.GLOBAL }}
+    environment: prod
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -55,4 +58,8 @@ jobs:
         run: echo "Deploying..."
       - name: Output information
         run: |
-          echo "Global var: ${{ env.GLOBAL }}"
+          echo "Global var: ${{ var.GLOBAL }}"
+      - name: Output information env
+        run: |
+          echo "PROD var: ${{ var.PROD_VARS }}"
+        
